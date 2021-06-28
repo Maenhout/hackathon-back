@@ -98,4 +98,3 @@ app.use('/', (req, res) => {
 app.listen(5050, () => {
   console.log(' API now available on http://localhost:5050 !');
 });
-
