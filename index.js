@@ -18,5 +18,3 @@ app.use('/', (req, res) => {
 app.listen(5050, () => {
   console.log('Terra Battle API now available on http://localhost:5050 !');
 });
-
-Envoyer un message à @[Lille] Robin Delannoy
