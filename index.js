@@ -51,22 +51,22 @@ app.post('/wanted', async (req, res) => {
   const {
     id,
     offer,
-
+    offerCategory,
     offerTitle,
     request,
-
+    requestCategory,
     requestTitle,
   } = req.body;
   console.log(req.body);
 
   const sql =
-    'INSERT INTO wantedservice (usersId, textWanted, title) VALUES( ?,?,?)';
-  const sqlValues = [id, request, requestTitle];
+    'INSERT INTO wantedservice (usersId, title, categoryId, textWanted) VALUES ( ?, ?, ?, ?)';
+  const sqlValues = [id, requestTitle, requestCategory, request];
   await db.query(sql, sqlValues);
 
   const sql2 =
-    'INSERT INTO proposedservice (usersId, textProposed, title) VALUES( ?,?,?)';
-  const sqlValues2 = [id, offer, offerTitle];
+    'INSERT INTO proposedservice (usersId,title, categoryId, textProposed) VALUES ( ?, ?, ?, ?)';
+  const sqlValues2 = [id, offerTitle, offerCategory, offer];
   await db.query(sql2, sqlValues2, (err, results) => {
     console.log(err);
     if (err) res.status(500).send('Error ....');
