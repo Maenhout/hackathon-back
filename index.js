@@ -25,6 +25,15 @@ app.get('/wantedservice/:id', async (req, res) => {
   res.json(results);
 });
 
+app.get('/proposedservice/:id', async (req, res) => {
+  const {id} = req.params;
+  const sql = 'SELECT * FROM proposedservice WHERE categoryId=? ';
+  let sqlValues =[id]
+  const [results] = await db.query(sql,sqlValues);
+  console.log(results);
+  res.json(results);
+});
+
 
 app.post('/wanted', async (req, res) => {
   const {
