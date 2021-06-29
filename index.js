@@ -1,3 +1,4 @@
+
 const express = require('express');
 const cors = require('cors');
 const { db } = require('./conf');
@@ -8,65 +9,26 @@ app.use(express.json());
 
 app.use(cors());
 
-app.get('/users', async (req, res) => {
-  const sql = 'SELECT * FROM users';
-  const [results] = await db.query(sql);
-  res.json(results);
-});
-
-app.get('/users/:id', async (req, res) => {
-  const { id } = req.params;
-  const sql = 'SELECT mail,username,contact FROM users WHERE id=?';
-  const sqlValues = [id];
-  const [results] = await db.query(sql, sqlValues);
-  res.json(results);
-});
-
-app.post('/users', async (req, res) => {
-  const { mail, username, contact } = req.body;
-  const sql = 'INSERT INTO users (mail,username,contact) VALUES(?,?,?)';
-  const sqlValues = [mail, username, contact];
-  const [results] = await db.query(sql, sqlValues);
-  res.status(201).json(results);
-});
-
-app.put('/users/:id', async (req, res) => {
-  const { id } = req.params;
-  const { mail, username, contact } = req.body;
-  const sql = 'UPDATE users SET mail=?, username=?, contact=? WHERE id=?';
-  const sqlValues = [mail, username, contact, id];
-  const [results] = await db.query(sql, sqlValues);
-  res.status(201).json(results);
-});
-
-app.delete('/users/:id', async (req, res) => {
-  const { id } = req.params;
-  const sql = 'DELETE FROM users WHERE id=?';
-  const sqlValues = [id];
-  const [results] = await db.query(sql, sqlValues);
-  res.json(results);
-});
-
 app.post('/wanted', async (req, res) => {
   const {
     id,
     offer,
-
+    offerCategory,
     offerTitle,
     request,
-
+    requestCategory,
     requestTitle,
   } = req.body;
   console.log(req.body);
 
   const sql =
-    'INSERT INTO wantedservice (usersId, textWanted, title) VALUES( ?,?,?)';
-  const sqlValues = [id, request, requestTitle];
+    'INSERT INTO wantedservice (usersId, title, categoryId, textWanted) VALUES ( ?, ?, ?, ?)';
+  const sqlValues = [id, requestTitle, requestCategory, request];
   await db.query(sql, sqlValues);
 
   const sql2 =
-    'INSERT INTO proposedservice (usersId, textProposed, title) VALUES( ?,?,?)';
-  const sqlValues2 = [id, offer, offerTitle];
+    'INSERT INTO proposedservice (usersId,title, categoryId, textProposed) VALUES ( ?, ?, ?, ?)';
+  const sqlValues2 = [id, offerTitle, offerCategory, offer];
   await db.query(sql2, sqlValues2, (err, results) => {
     console.log(err);
     if (err) res.status(500).send('Error ....');
