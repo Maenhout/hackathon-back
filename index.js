@@ -1,4 +1,3 @@
-
 const express = require('express');
 const cors = require('cors');
 const { db } = require('./conf');
@@ -7,33 +6,37 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-
-
-
 app.get('/wantedservice', async (req, res) => {
-  const sql = 'SELECT * FROM wantedservice';
+  const sql = `
+    select 
+      textWanted, label, username 
+    from 
+      wantedservice 
+      join category on category.id = wantedservice.categoryId 
+      join users on users.id = wantedservice.usersId`;
   const [results] = await db.query(sql);
   res.json(results);
 });
 
 app.get('/wantedservice/:id', async (req, res) => {
-  const {id} = req.params;
-  const sql = 'SELECT * FROM wantedservice WHERE categoryId=? ';
-  let sqlValues =[id]
-  const [results] = await db.query(sql,sqlValues);
+  const { id } = req.params;
+  const sql =
+    'select textWanted, label, username, mail from wantedservice join category on category.id = wantedservice.categoryId join users on users.id = wantedservice.usersId WHERE categoryId=? ';
+  const sqlValues = [id];
+  const [results] = await db.query(sql, sqlValues);
   console.log(results);
   res.json(results);
 });
 
 app.get('/proposedservice/:id', async (req, res) => {
-  const {id} = req.params;
-  const sql = 'SELECT * FROM proposedservice WHERE categoryId=? ';
-  let sqlValues =[id]
-  const [results] = await db.query(sql,sqlValues);
+  const { id } = req.params;
+  const sql =
+    'select textProposed, label, username, mail from proposedservice join category on category.id = proposedservice.categoryId join users on users.id = proposedservice.usersId WHERE categoryId=?';
+  const sqlValues = [id];
+  const [results] = await db.query(sql, sqlValues);
   console.log(results);
   res.json(results);
 });
-
 
 app.post('/wanted', async (req, res) => {
   const {
@@ -71,14 +74,12 @@ app.get('/category', async (req, res) => {
   res.json(results);
 });
 
-
-
 app.get('/proposedservice', async (req, res) => {
-  const sql = 'SELECT * FROM proposedservice';
+  const sql =
+    'select textProposed, label, username from proposedservice join category on category.id = proposedservice.categoryId join users on users.id = proposedservice.usersId;';
   const [results] = await db.query(sql);
   res.json(results);
 });
-
 
 app.post('/proposedservice', async (req, res) => {
   const { usersId, categoryId, textProposed } = req.body;
@@ -90,11 +91,9 @@ app.post('/proposedservice', async (req, res) => {
   res.status(201).json(results);
 });
 
-
 app.use('/', (req, res) => {
   res.status(404).send('Route not found! ');
 });
-
 
 app.listen(5050, () => {
   console.log(' API now available on http://localhost:5050 !');
