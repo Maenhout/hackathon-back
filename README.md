@@ -1,5 +1,6 @@
 **HACKATHON PARTENARIAT : WILD CODE SCHOOL / FIVERR**
 
+**Durée :** 2 jours et une matinée
 **Problématique :** proposer une application pour améliorer les échanges entre les freelance qui travail via Fiverr.
 **Solution proposée :** permettre au freelance de troquer leurs service entre eux.
 
